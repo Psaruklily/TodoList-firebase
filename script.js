@@ -11,65 +11,25 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 //firebase.analytics();
 
-//ready data---------------------------------------------------------------
-
-// let insertBtn = document.querySelector('#insert');
-// let nameUser, roll, sec, gen
-
-// function Ready() {
-//     nameUser = document.querySelector('#namebox').value;
-//     roll = document.querySelector('#rollbox').value;
-//     sec = document.querySelector('#secbox').value;
-//     gen = document.querySelector('#genbox').value;
-// }
-
-//Old version
-// insertBtn.onclick = function() {
-//     Ready();
-//     let ref = firebase.database().ref('student/' + roll);
-//     ref.set({
-//             NameOfStudent: nameUser,
-//             RollNo: roll,
-//             Section: sec,
-//             Gender: gen
-//         })
-// }
-
-
-//===================================  new version
-// insertBtn.onclick = function() {
-//     Ready();
-//     let ref = firebase.database().ref('student');
-//     ref.push({
-//         NameOfStudent: nameUser,
-//         RollNo: roll,
-//         Section: sec,
-//         Gender: gen
-//     })
-// }
-
-//=========================================================================================================================
-
-
 let buttonSave = document.querySelector('#insert');
 let taskInput = document.querySelector('#namebox');
-let output = document.querySelector('.output');
+let output = document.querySelector('.output ul');
 
 let ref = firebase.database().ref('tasks');
 
 buttonSave.addEventListener('click', function() {
-
-    let newRef = ref.push(taskInput.value)
-        // newRef.then(function(snap) {
-        //     const key = snap.key;
-        //     console.log(key)
-        // })
+    let newRef = ref.push();
+    newRef.set(taskInput.value);
 })
 
-ref.on('value', function(snapshot) {
-    let data = snapshot.val();
-    console.log(data)
-    for (let key in data) {
-        output.innerHTML += data[key] + '<br>'
-    }
+function outputData(text) {
+    let li = document.createElement('li');
+    li.innerHTML = text;
+    output.appendChild(li)
+}
+
+ref.on('child_added', function(snapOfNewChild) {
+    let val = snapOfNewChild.val()
+    console.log(val)
+    outputData(val);
 })
