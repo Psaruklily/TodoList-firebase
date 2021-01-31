@@ -32,15 +32,24 @@ function outputData(currentData, id) {
     li.appendChild(p)
     output.appendChild(li)
 
-    let btn = document.createElement('button');
-    btn.innerHTML = 'Update';
-    li.appendChild(btn);
+    let btnUpdate = document.createElement('button');
+    btnUpdate.innerHTML = 'Update';
+    li.appendChild(btnUpdate);
 
-    btn.addEventListener('click', (event) => {
-        console.log(id)
+    let btnDelete = document.createElement('button');
+    btnDelete.innerHTML = 'Delete';
+    li.appendChild(btnDelete);
+
+    btnUpdate.addEventListener('click', (event) => {
+        taskInput.value = currentData.task;
         taskInput.value = currentData.task;
         let activeLi = event.target.parentElement
-        updateData(id, activeLi)
+        updateData(id, activeLi, currentData)
+    })
+
+    btnDelete.addEventListener('click', () => {
+        firebase.database().ref('tasks').child(id).remove();
+        li.parentNode.removeChild(li);
     })
 }
 
@@ -60,13 +69,13 @@ function updateData(id, li) {
             task: taskInput.value,
             date: Date.now(),
         });
+        taskInput.value = null;
+        id = null;
     })
     firebase.database().ref('tasks').on('child_changed', data => {
         let value = data.val()
-        console.log(value)
         let contentOfNewTask = li.querySelector('p');
         contentOfNewTask.innerHTML = value.task
         firebase.database().ref('tasks').off('child_changed')
     })
-
 }
