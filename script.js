@@ -1,4 +1,4 @@
-var firebaseConfig = {
+let firebaseConfig = {
     apiKey: "AIzaSyDx7UoyrQ_-dGqTUKJj3-7zKlR2hzXFL-w",
     authDomain: "todolist-94d94.firebaseapp.com",
     projectId: "todolist-94d94",
@@ -11,25 +11,62 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 //firebase.analytics();
 
-let buttonSave = document.querySelector('#insert');
-let taskInput = document.querySelector('#namebox');
+let buttonSave = document.querySelector('#save');
+let buttonUpdate = document.querySelector('#update')
+let taskInput = document.querySelector('#content-task');
 let output = document.querySelector('.output ul');
 
-let ref = firebase.database().ref('tasks');
+buttonSave.addEventListener('click', () => {
+    firebase.database().ref('tasks').push().set({
+        task: taskInput.value,
+        date: Date.now()
+    })
 
-buttonSave.addEventListener('click', function() {
-    let newRef = ref.push();
-    newRef.set(taskInput.value);
 })
 
-function outputData(text) {
+function outputData(currentData, id) {
     let li = document.createElement('li');
-    li.innerHTML = text;
+    let p = document.createElement('p');
+    p.innerHTML = currentData.task;
+    p.style.display = 'inline'
+    li.appendChild(p)
     output.appendChild(li)
+
+    let btn = document.createElement('button');
+    btn.innerHTML = 'Update';
+    li.appendChild(btn);
+
+    btn.addEventListener('click', (event) => {
+        console.log(id)
+        taskInput.value = currentData.task;
+        let activeLi = event.target.parentElement
+        updateData(id, activeLi)
+    })
 }
 
-ref.on('child_added', function(snapOfNewChild) {
-    let val = snapOfNewChild.val()
-    console.log(val)
-    outputData(val);
-})
+function getData(callback) {
+    firebase.database().ref('tasks').on('child_added', snap => {
+        let val = snap.val();
+        let key = snap.key;
+        callback(val, key)
+    })
+}
+
+getData(outputData);
+
+function updateData(id, li) {
+    buttonUpdate.addEventListener('click', () => {
+        firebase.database().ref('tasks').child(id).update({
+            task: taskInput.value,
+            date: Date.now(),
+        });
+    })
+    firebase.database().ref('tasks').on('child_changed', data => {
+        let value = data.val()
+        console.log(value)
+        let contentOfNewTask = li.querySelector('p');
+        contentOfNewTask.innerHTML = value.task
+        firebase.database().ref('tasks').off('child_changed')
+    })
+
+}
