@@ -5,18 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 </head>
 
 <body>
 
-    Task <input id="content-task" type="text"></input><br>
+    <div class="headerList">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMC3t_W_aoi0MAlM2kkRX0VPWr8QeNAbKb9A&usqp=CAU" alt="">
+        <h1>ToDo List</h1>
+    </div>
+
+    <div class="container">
+        <h4>Add An item</h4>
+        <div class="wrap-for-input-buttons">
+            <div>
+                <form>
+                    <input type="text" name="message">
+                </form>
+            </div>
+            <div>
+                <button type="button" class="save-btn">SAVE</button>
+                <button type="button" class="update-btn display-none">UPDATE</button>
+            </div>
+            <div>
+                <button type="button" class="сlean-up">Сlean up</button>
+            </div>
+        </div>
+
+
+        <div class="list">
+            <ul></ul>
+        </div>
+    </div>
+
+    <!-- Task <input id="content-task" type="text"></input><br>
 
     <button id="save">SAVE</button>
     <button id="update">UPDATE</button>
 
     <div class="output">
         <ul></ul>
-    </div>
+    </div> -->
 
     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
