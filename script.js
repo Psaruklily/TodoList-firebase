@@ -82,13 +82,11 @@ function outputData(currentData, id) {
         updateData(id, li);
     })
 
-
     cancel.addEventListener('click', () => {
         firebase.database().ref('tasks').child(id).remove();
         li.parentNode.removeChild(li);
     })
 }
-
 
 messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -99,8 +97,6 @@ messageForm.addEventListener('submit', (e) => {
     taskInput.value = '';
 })
 
-
-// MY --------------------------------------------------------------------------------------------------------
 buttonSave.addEventListener('click', () => {
     firebase.database().ref('tasks').push().set({
         task: taskInput.value,
@@ -108,7 +104,6 @@ buttonSave.addEventListener('click', () => {
     })
     taskInput.value = '';
 })
-
 
 function updateData(id, li) {
     buttonUpdate.addEventListener('click', () => {
@@ -128,5 +123,3 @@ function updateData(id, li) {
         firebase.database().ref('tasks').off('child_changed')
     })
 }
-
-// MY END--------------------------------------------------------------------------------------------------
